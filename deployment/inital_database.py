@@ -21,6 +21,8 @@ def create_database():
         category_depth INTEGER NOT NULL,
         parent_category_no INTEGER,
         category_name TEXT NOT NULL,
+        full_category_name TEXT,
+        full_category_no TEXT,
         root_category_no INTEGER,
         use_display TEXT DEFAULT 'T',
         display_order INTEGER DEFAULT 0,
@@ -165,23 +167,36 @@ def insert_sample_data(conn, cursor):
     
     # 카테고리 샘플 데이터 추가 (제공된 JSON 형식 참조)
     categories = [
-        (1, 27, 1, 1, "(large scale classification) Bottoms", 27, "T", 0, json.dumps(["tag1", "tag2"]), current_time, current_time),
-        (1, 28, 1, 1, "(large scale classification) Accessories", 28, "T", 0, json.dumps(["tag1", "tag2"]), current_time, current_time),
-        (1, 29, 2, 27, "Jeans", 27, "T", 0, json.dumps(["denim", "casual"]), current_time, current_time),
-        (1, 30, 2, 27, "Slacks", 27, "T", 0, json.dumps(["formal", "office"]), current_time, current_time),
-        (1, 31, 2, 28, "Bags", 28, "T", 0, json.dumps(["fashion", "carry"]), current_time, current_time),
-        (1, 32, 2, 28, "Hats", 28, "T", 0, json.dumps(["cap", "headwear"]), current_time, current_time),
-        (1, 33, 1, 1, "Electronics", 33, "T", 0, json.dumps(["tech", "gadgets"]), current_time, current_time),
-        (1, 34, 2, 33, "Smartphones", 33, "T", 0, json.dumps(["mobile", "phones"]), current_time, current_time)
+        (1, 27, 1, 1, "(중분류) 재킷", json.dumps(["(대분류) 상의","(중분류) 재킷"]), json.dumps([24, 29]), 27, "T", 0, json.dumps(["겨울", "아우터", "패션"]), current_time, current_time),
+        (1, 28, 1, 1, "(중분류) 티셔츠", json.dumps(["(대분류) 상의","(중분류) 티셔츠"]), json.dumps([24, 28]), 24, "T", 1, json.dumps(["캐주얼", "베이직", "일상"]), current_time, current_time),
+        (1, 29, 1, 1, "(중분류) 셔츠", json.dumps(["(대분류) 상의","(중분류) 셔츠"]), json.dumps([24, 29]), 24, "T", 2, json.dumps(["정장", "비즈니스", "공식"]), current_time, current_time),
+        (1, 30, 1, 1, "(중분류) 청바지", json.dumps(["(대분류) 하의","(중분류) 청바지"]), json.dumps([25, 30]), 25, "T", 0, json.dumps(["데님", "캐주얼", "편안함"]), current_time, current_time),
+        (1, 31, 1, 1, "(중분류) 바지", json.dumps(["(대분류) 하의","(중분류) 바지"]), json.dumps([25, 31]), 25, "T", 1, json.dumps(["정장", "슬랙스", "오피스"]), current_time, current_time),
+        (1, 32, 1, 1, "(중분류) 스커트", json.dumps(["(대분류) 하의","(중분류) 스커트"]), json.dumps([25, 32]), 25, "T", 2, json.dumps(["여성", "우아함", "패션"]), current_time, current_time),
+        (1, 33, 1, 1, "(중분류) 운동화", json.dumps(["(대분류) 신발","(중분류) 운동화"]), json.dumps([26, 33]), 26, "T", 0, json.dumps(["스포츠", "캐주얼", "편안함"]), current_time, current_time),
+        (1, 34, 1, 1, "(중분류) 구두", json.dumps(["(대분류) 신발","(중분류) 구두"]), json.dumps([26, 34]), 26, "T", 1, json.dumps(["정장", "가죽", "비즈니스"]), current_time, current_time),
+        (1, 35, 1, 1, "(중분류) 부츠", json.dumps(["(대분류) 신발","(중분류) 부츠"]), json.dumps([26, 35]), 26, "T", 2, json.dumps(["겨울", "패션", "따뜻함"]), current_time, current_time),
+        (1, 36, 1, 1, "(중분류) 백팩", json.dumps(["(대분류) 가방","(중분류) 백팩"]), json.dumps([27, 36]), 27, "T", 0, json.dumps(["여행", "일상", "실용성"]), current_time, current_time),
+        (1, 37, 1, 1, "(중분류) 핸드백", json.dumps(["(대분류) 가방","(중분류) 핸드백"]), json.dumps([27, 37]), 27, "T", 1, json.dumps(["럭셔리", "패션", "우아함"]), current_time, current_time),
+        (1, 38, 1, 1, "(중분류) 시계", json.dumps(["(대분류) 액세서리","(중분류) 시계"]), json.dumps([28, 38]), 28, "T", 0, json.dumps(["럭셔리", "시간", "액세서리"]), current_time, current_time),
+        (1, 39, 1, 1, "(중분류) 목걸이", json.dumps(["(대분류) 액세서리","(중분류) 목걸이"]), json.dumps([28, 39]), 28, "T", 1, json.dumps(["주얼리", "패션", "장식"]), current_time, current_time),
+        (1, 40, 1, 1, "(중분류) 모자", json.dumps(["(대분류) 액세서리","(중분류) 모자"]), json.dumps([28, 40]), 28, "T", 2, json.dumps(["캐주얼", "스포츠", "햇빛차단"]), current_time, current_time),
+        (1, 41, 1, 1, "(중분류) 후드티", json.dumps(["(대분류) 상의","(중분류) 후드티"]), json.dumps([24, 41]), 24, "T", 3, json.dumps(["캐주얼", "스트리트", "편안함"]), current_time, current_time),
+        (1, 42, 1, 1, "(중분류) 코트", json.dumps(["(대분류) 아우터","(중분류) 코트"]), json.dumps([29, 42]), 29, "T", 0, json.dumps(["겨울", "정장", "보온"]), current_time, current_time),
+        (1, 43, 1, 1, "(중분류) 조끼", json.dumps(["(대분류) 아우터","(중분류) 조끼"]), json.dumps([29, 43]), 29, "T", 1, json.dumps(["레이어링", "패션", "스타일"]), current_time, current_time),
+        (1, 44, 1, 1, "(중분류) 드레스", json.dumps(["(대분류) 원피스","(중분류) 드레스"]), json.dumps([30, 44]), 30, "T", 0, json.dumps(["여성", "우아함", "특별한날"]), current_time, current_time),
+        (1, 45, 1, 1, "(중분류) 점프수트", json.dumps(["(대분류) 원피스","(중분류) 점프수트"]), json.dumps([30, 45]), 30, "T", 1, json.dumps(["트렌디", "올인원", "편리함"]), current_time, current_time),
+        (1, 46, 1, 1, "(중분류) 스카프", json.dumps(["(대분류) 액세서리","(중분류) 스카프"]), json.dumps([28, 46]), 28, "T", 3, json.dumps(["겨울", "패션", "보온"]), current_time, current_time),
+    
     ]
     
     cursor.executemany('''
     INSERT OR REPLACE INTO categories (
         shop_no, category_no, category_depth, parent_category_no, 
-        category_name, root_category_no, use_display, display_order, 
+        category_name, full_category_name, full_category_no, root_category_no, use_display, display_order, 
         hash_tags, created_at, updated_at
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?)
     ''', categories)
     
     # 사용자 샘플 데이터 추가
