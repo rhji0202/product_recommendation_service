@@ -1,7 +1,7 @@
 from google.adk.agents import Agent,LlmAgent
 from .tools import search_category_by_keyword
 
-category_search_agent = Agent(
+category_search_agent = LlmAgent(
     name="category_search_agent",
     description="A agent that can search for categories",
     model="gemini-2.0-flash",
@@ -24,5 +24,5 @@ category_search_agent = Agent(
     
     """,
     tools=[search_category_by_keyword],
-    output_key="category_search_output"
+    output_key="category_search_result"
 )

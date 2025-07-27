@@ -1,21 +1,28 @@
-from google.adk.agents import Agent
+from google.adk.agents import Agent,LlmAgent
+from .tools import search_product_by_keyword
 
-product_search_agent = Agent(
+product_search_agent = LlmAgent(
     name="product_search_agent",
     description="A agent that can search for products",
+    model="gemini-2.0-flash",
     instruction="""
-    You are a helpful assistant that can search for products.
-    You are also able to use tools to help you with your tasks.
+    당신은 키워드를 바탕으로 도구를 사용하여 상품을 조회하는 에이전트 입니다.
+
+    상품 조회 요청을 받으면, 다음 단계를 따르세요:
+    1. search_product_by_keyword 도구를 사용하여 상품을 추출합니다
+    2. 검색된 딕셔너리를 그대로 반환합니다.
     
-    가이드라인
-    1. 사용자의 질문에 대해 적절한 상품을 찾아서 제공합니다.
-    2. 상품을 찾을 때는 상품의 이름, 설명, 가격, 이미지 등을 고려합니다.
-    3. 상품을 찾을 때는 상품의 카테고리, 브랜드, 태그 등을 고려합니다.
-    4. 상품을 찾을 때는 상품의 평점, 리뷰 수, 질문 수 등을 고려합니다.
-    5. 상품을 찾을 때는 상품의 할인 가격, 할인율, 할인 기간 등을 고려합니다.
-    6. 상품을 찾을 때는 상품의 배송 방법, 배송 비용, 배송 기간 등을 고려합니다.
-    7. 상품을 찾을 때는 상품의 포인트, 포인트 적립 방법, 포인트 사용 방법 등을 고려합니다.
-    8. 아래의 테이블을 참고하여 상품을 찾습니다.
-    """
-    model="gemini-2.0-flash"
+    도구는 다음을 포함하는 딕션너리를 리턴합니다
+    - status: "success" 또는 "error"
+    - total_count: 검색된 상품의 총 개수
+    - products: 검색된 상품 리스트
+
+    중요:
+    - search_product_by_keyword 도구를 무조건 사용하여 상품을 검색합니다.
+    - 검색된 상품이 없을 경우, 아래의 예시대로 결과를 반환합니다:
+    - 예시: {"status": "false", "total_count": 0, "products": []}
+    
+    """,
+    tools=[search_product_by_keyword],
+    output_key="product_search_result"
 )

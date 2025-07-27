@@ -3,6 +3,7 @@ import os
 import json
 import ast
 from typing import List
+from google.adk.tools import ToolContext
 
 def get_db_connection():
     """데이터베이스 연결을 생성하고 반환합니다."""
@@ -17,7 +18,7 @@ def get_db_connection():
 
 from typing import Dict, Any
 
-def search_category_by_keyword(keywords: List[str]) -> Dict[str, Any]:
+def search_category_by_keyword(keywords: List[str], tool_context: ToolContext) -> Dict[str, Any]:
     print(f"search_category_by_keyword: {keywords}")
     """
     키워드를 기반으로 카테고리를 검색합니다.
@@ -97,6 +98,7 @@ def search_category_by_keyword(keywords: List[str]) -> Dict[str, Any]:
             })
         
         print(f"Found {len(categories)} categories")
+        tool_context.state["categories"] = categories
         return {
             "status": "success",
             "total_count": len(categories),
